@@ -1,0 +1,8 @@
+*.pyc
+*.pyd
+*.pyo
+.idea
+__pycache__
+.venv
+.python-version
+.cache
