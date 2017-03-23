@@ -12,8 +12,8 @@ from .attachment import (
     get_image,
     get_default_image,
 )
-
 from .sql import get_employee_records
+from .serialize import BufferJsonEncoder
 
 
 class EmployeeRec(namedtuple('Employee', [
@@ -25,6 +25,7 @@ class EmployeeRec(namedtuple('Employee', [
     'email',
     'image',
     'gender',
+    'department',
     'group_id',
     'depth',
     'children'
@@ -41,8 +42,8 @@ class EmployeeRec(namedtuple('Employee', [
         return self.id
 
     @classmethod
-    def fetch(cls):
-        for rec in get_employee_records():
+    def fetch(cls, **kwargs):
+        for rec in get_employee_records(**kwargs):
             yield cls.create(*rec)
 
     @classmethod
@@ -53,10 +54,10 @@ class EmployeeRec(namedtuple('Employee', [
         return rec._replace(image=img)
 
     @classmethod
-    def build_tree(cls):
+    def build_tree(cls, **kwargs):
         flt = set()
         storage = {}
-        for rec in cls.fetch():
+        for rec in cls.fetch(**kwargs):
             storage[rec.id] = rec
         for rec in storage.itervalues():
             if rec.parent_id is not None:
@@ -72,7 +73,7 @@ class EmployeeRec(namedtuple('Employee', [
             yield item
 
     def to_json(self):
-        return json.dumps(self.as_dict())
+        return json.dumps(self.as_dict(), cls=BufferJsonEncoder)
 
     def as_dict(self):
         dct = self._asdict()
@@ -100,4 +101,4 @@ class EmployeeBag(object):
 
     def to_json(self, indent=None):
         return json.dumps(
-            [value.as_dict() for value in self.values], indent=indent)
+            [value.as_dict() for value in self.values], indent=indent, cls=BufferJsonEncoder)

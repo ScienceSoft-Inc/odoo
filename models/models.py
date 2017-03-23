@@ -2,8 +2,8 @@
 from __future__ import (
     absolute_import,
     print_function,
-    unicode_literals,
 )
+
 from odoo import models, api
 
 from etv.core import (
@@ -14,8 +14,14 @@ from etv.core import (
 
 class Etv(models.Model):
 
-    _inherit = 'hr.employee'
+    _name = 'etv.etv'
 
     @api.model
-    def hr_tree(self):
-        return EmployeeBag(EmployeeRec.build_tree())
+    def employees(self, **kwargs):
+        recs = EmployeeRec.build_tree(cursor=self._cr, **kwargs)
+        return EmployeeBag(recs)
+
+    @api.model
+    def to_json(self, indent=None, **kwargs):
+        recs = EmployeeRec.build_tree(cursor=self._cr, **kwargs)
+        return EmployeeBag(recs).to_json(indent=indent)

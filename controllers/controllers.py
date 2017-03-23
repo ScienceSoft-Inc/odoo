@@ -1,10 +1,24 @@
 # -*- coding: utf-8 -*-
-from odoo import http
+from __future__ import (
+    absolute_import,
+    print_function,
+    unicode_literals,
+)
 
-# class Etv(http.Controller):
-#     @http.route('/etv/etv/', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+from odoo import http
+from odoo.http import Response
+
+
+class EtvController(http.Controller):
+
+    @http.route('/etv/etv/', auth='public', methods=['GET'])
+    def index(self, **kw):
+        etv = http.request.env['etv.etv']
+        return Response(
+            etv.to_json(indent=4),
+            content_type='application/json; charset=utf-8'
+        )
+
 
 #     @http.route('/etv/etv/objects/', auth='public')
 #     def list(self, **kw):

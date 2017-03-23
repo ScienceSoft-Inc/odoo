@@ -20,7 +20,7 @@
     'installable': True,
 
     # any module necessary for this one to work correctly
-    'depends': ['hr', 'calendar', 'survey'],
+    'depends': ['hr'],
 
     # always loaded
     'data': [
