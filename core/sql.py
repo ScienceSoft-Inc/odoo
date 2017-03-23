@@ -39,6 +39,7 @@ EMPLOYEES_QUERY = """
           LEFT OUTER JOIN hr_department AS d
           ON (t.department_id = d.id)
           WHERE t.parent_id is NULL
+          {where:s}
         UNION ALL
         SELECT t.id,
                t.parent_id,
@@ -69,15 +70,26 @@ def connect(uid=1, context=None):
     return env
 
 
-def get_employee_records():
-    env = connect(config.get('db_name'))
-    cursor = env.cr
-    cursor.execute(EMPLOYEES_QUERY)
+def get_employee_records(cursor=None, _id=None, department_id=None):
+    flt = []
+    params = []
+    if department_id is not None:
+        flt.append('AND d.department_id = %s')
+        params.append(department_id)
+    if _id is not None:
+        flt.append('AND t.id = %s')
+        params.append(_id)
+    if cursor is None:
+        env = connect(config.get('db_name'))
+        cursor = env.cr
+    query = EMPLOYEES_QUERY.format(where=' '.join(flt))
+    cursor.execute(query, *params)
     while True:
         try:
             rec = cursor.next()
             yield rec
         except StopIteration:
             break
-    cursor.close()
-    Environment.reset()
+    if cursor is None:
+        cursor.close()
+        Environment.reset()

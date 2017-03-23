@@ -39,8 +39,8 @@ class EmployeeRec(namedtuple('Employee', [
         return self.id
 
     @classmethod
-    def fetch(cls):
-        for rec in get_employee_records():
+    def fetch(cls, **kwargs):
+        for rec in get_employee_records(**kwargs):
             yield cls.create(*rec)
 
     @classmethod
@@ -51,10 +51,10 @@ class EmployeeRec(namedtuple('Employee', [
         return rec
 
     @classmethod
-    def build_tree(cls):
+    def build_tree(cls, **kwargs):
         flt = set()
         storage = {}
-        for rec in cls.fetch():
+        for rec in cls.fetch(**kwargs):
             storage[rec.id] = rec
         for rec in storage.itervalues():
             if rec.parent_id is not None:

@@ -17,9 +17,11 @@ class Etv(models.Model):
     _name = 'etv.etv'
 
     @api.model
-    def employees(self):
-        return EmployeeBag(EmployeeRec.build_tree())
+    def employees(self, **kwargs):
+        recs = EmployeeRec.build_tree(cursor=self._cr, **kwargs)
+        return EmployeeBag(recs)
 
     @api.model
-    def to_json(self, indent=None):
-        return EmployeeBag(EmployeeRec.build_tree()).to_json(indent=indent)
+    def to_json(self, indent=None, **kwargs):
+        recs = EmployeeRec.build_tree(cursor=self._cr, **kwargs)
+        return EmployeeBag(recs).to_json(indent=indent)
