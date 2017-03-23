@@ -8,12 +8,9 @@ import json
 from collections import namedtuple
 from operator import attrgetter
 
-from .attachment import (
-    get_image,
-    get_default_image,
-)
-
+from .attachment import get_default_image
 from .sql import get_employee_records
+from .serialize import BufferJsonEncoder
 
 
 class EmployeeRec(namedtuple('Employee', [
@@ -25,6 +22,7 @@ class EmployeeRec(namedtuple('Employee', [
     'email',
     'image',
     'gender',
+    'department',
     'group_id',
     'depth',
     'children'
@@ -48,9 +46,9 @@ class EmployeeRec(namedtuple('Employee', [
     @classmethod
     def create(cls, *args):
         rec = cls(*(args + ([],)))
-        img = (get_image(rec.image) if rec.image is not None
-               else get_default_image())
-        return rec._replace(image=img)
+        if not rec.image:
+            rec = rec._replace(image=get_default_image())
+        return rec
 
     @classmethod
     def build_tree(cls):
@@ -72,7 +70,7 @@ class EmployeeRec(namedtuple('Employee', [
             yield item
 
     def to_json(self):
-        return json.dumps(self.as_dict())
+        return json.dumps(self.as_dict(), cls=BufferJsonEncoder)
 
     def as_dict(self):
         dct = self._asdict()
@@ -100,4 +98,4 @@ class EmployeeBag(object):
 
     def to_json(self, indent=None):
         return json.dumps(
-            [value.as_dict() for value in self.values], indent=indent)
+            [value.as_dict() for value in self.values], indent=indent, cls=BufferJsonEncoder)

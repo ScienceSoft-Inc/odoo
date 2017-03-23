@@ -2,9 +2,9 @@
 from __future__ import (
     absolute_import,
     print_function,
-    unicode_literals,
 )
-from odoo import models, api
+
+from openerp import models, api
 
 from etv.core import (
     EmployeeRec,
@@ -14,8 +14,12 @@ from etv.core import (
 
 class Etv(models.Model):
 
-    _inherit = 'hr.employee'
+    _name = 'etv.etv'
 
     @api.model
-    def hr_tree(self):
+    def employees(self):
         return EmployeeBag(EmployeeRec.build_tree())
+
+    @api.model
+    def to_json(self, indent=None):
+        return EmployeeBag(EmployeeRec.build_tree()).to_json(indent=indent)
