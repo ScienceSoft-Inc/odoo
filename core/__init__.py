@@ -72,8 +72,8 @@ class EmployeeRec(namedtuple('Employee', [
         for item in (_ for child in self.children for _ in child.traverse()):
             yield item
 
-    def to_json(self):
-        return json.dumps(self.as_dict(), cls=BufferJsonEncoder)
+    def to_json(self, indent=None):
+        return json.dumps(self.as_dict(), indent=indent, cls=BufferJsonEncoder)
 
     def as_dict(self):
         dct = self._asdict()
@@ -87,7 +87,7 @@ class EmployeeBag(object):
         self.values = sorted(values, key=attrgetter('id'))
 
     def __str__(self):
-        gen = ('{}{}'.format(' ' * item.depth * 4, item) for item in self.tree)
+        gen = ('{}{}'.format(' ' * item.depth * 4, item) for item in self)
         return '\n'.join(gen).encode('utf8')
 
     @property
@@ -101,4 +101,6 @@ class EmployeeBag(object):
 
     def to_json(self, indent=None):
         return json.dumps(
-            [value.as_dict() for value in self.values], indent=indent, cls=BufferJsonEncoder)
+            [value.as_dict() for value in self.values],
+            indent=indent, cls=BufferJsonEncoder
+        )

@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="etv.action_window_form">
+            <field name="name">etv window form</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_url" id="etv.action_tree_url">
+            <field name="name">etv window tree</field>
+            <field name="url">/etv/etv/</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.actions.server" id="etv.action_server_code">
+            <field name="name">etv server code</field>
+            <field name="model_id" ref="etv.model_etv_etv"/>
+            <field name="code">
+                env["etv.etv"].to_json(indent=4)
+            </field>
+        </record>
+
+        <!-- Top menu item -->
+        <menuitem name="Employees Tree View" id="etv.menu"
+                  parent="hr.menu_hr_root"/>
+
+        <!-- menu categories -->
+        <menuitem name="Form list" id="etv.menu_list" parent="etv.menu"
+                  action="etv.action_window_form"/>
+
+        <menuitem name="Tree json list" id="etv.menu_json_tree"
+                  parent="etv.menu" action="etv.action_tree_url"/>
+
+        <menuitem name="Server code" id="etv.menu_server_code" parent="etv.menu"
+                  action="etv.action_server_code"/>
+
+    </data>
+</odoo>
