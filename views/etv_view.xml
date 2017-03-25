@@ -1,0 +1,15 @@
+<odoo>
+    <record model="ir.ui.view" id="etv.view_list">
+        <field name="name">etv view</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name_related"/>
+                <field name="image"/>
+                <field name="work_email"/>
+                <field name="mobile_phone"/>
+                <field name="marital"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

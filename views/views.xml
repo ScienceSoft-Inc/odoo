@@ -1,6 +1,5 @@
 <openerp>
   <data>
-    <!-- explicit list view definition -->
     <!--
     <record model="ir.ui.view" id="etv.view_list">
       <field name="name">etv view</field>
@@ -29,28 +28,26 @@
     -->
 
     <!-- actions opening views on models -->
+    <!--
+
     <record model="ir.actions.act_window" id="etv.action_window_form">
       <field name="name">etv window form</field>
       <field name="res_model">hr.employee</field>
       <field name="view_mode">tree,form</field>
     </record>
 
-    <!-- actions opening graph on models -->
     <record model="ir.actions.act_window" id="etv.action_window_graph">
       <field name="name">etv window graph</field>
       <field name="res_model">hr.employee</field>
       <field name="view_mode">graph</field>
     </record>
 
-    <!-- actions opening tree json on models -->
     <record model="ir.actions.act_url" id="etv.action_tree_url">
       <field name="name">etv window tree</field>
       <field name="url">/etv/etv/</field>
       <field name="target">new</field>
     </record>
 
-    <!-- server action to the one above -->
-    <!--
     <record model="ir.actions.server" id="etv.action_server">
       <field name="name">etv server</field>
       <field name="model_id" ref="hr.model_hr_employee"/>
@@ -62,9 +59,7 @@
         }
       </field>
     </record>
-    -->
 
-    <!-- server action to the one above -->
     <record model="ir.actions.server" id="etv.action_server_code">
       <field name="name">etv server code</field>
       <field name="model_id" ref="etv.model_etv_etv"/>
@@ -73,21 +68,19 @@
       </field>
     </record>
 
-    <!-- Top menu item -->
     <menuitem name="Employees Tree View" id="etv.menu" parent="hr.menu_hr_root"/>
-    <!-- menu categories -->
     <menuitem name="Form list" id="etv.menu_list" parent="etv.menu" action="etv.action_window_form"/>
 
     <menuitem name="Graph list" id="etv.menu_graph" parent="etv.menu" action="etv.action_window_graph"/>
 
     <menuitem name="Tree json list" id="etv.menu_json_tree" parent="etv.menu" action="etv.action_tree_url"/>
 
-    <!--
     <menuitem name="View list" id="etv.menu_view" parent="etv.menu" action="etv.action_window_view"/>
     -->
 
     <!--
     <menuitem name="Server to list" id="etv.menu_server" parent="etv.menu" action="etv.action_server"/>
+    <menuitem name="Server code" id="etv.menu_server_code" parent="etv.menu" action="etv.action_server_code"/>
     -->
 
     <menuitem name="Server code" id="etv.menu_server_code" parent="etv.menu" action="etv.action_server_code"/>
