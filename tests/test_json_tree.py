@@ -8,7 +8,7 @@ from etv.core import EmployeeBag
 class TestEtv(TransactionCase):
 
     def test_json_tree(self):
-        etv = self.env['etv.etv']
+        etv = self.env['hr.employee']
         bag = etv.employees()
         jsn = json.loads(etv.to_json())
         self.assertIsInstance(bag, EmployeeBag)

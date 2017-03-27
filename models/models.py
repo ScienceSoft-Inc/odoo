@@ -14,7 +14,7 @@ from etv.core import (
 
 class Etv(models.Model):
 
-    _name = 'etv.etv'
+    _inherit = 'hr.employee'
 
     @api.model
     def employees(self, **kwargs):
