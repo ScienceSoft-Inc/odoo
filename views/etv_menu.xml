@@ -1,23 +1,45 @@
 <odoo>
     <data>
 
-        <record model="ir.actions.act_window" id="etv.action_window_form">
-            <field name="name">etv window form</field>
+        <record model="ir.actions.act_window" id="etv.action">
+            <field name="name">Employees Tree View</field>
             <field name="res_model">hr.employee</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="view_id" ref="etv.employee_tree"/>
+            <field name="views">[('etv.employee_tree', 'tree')]</field>
+            <field name="search_view_id" ref="etv.employee_search"/>
+            <field name="context">{'search_default_top_hierarchy': 1}</field>
+            <field name="limit">100</field>
+            <field name="domain">[]</field>
         </record>
 
-        <record model="ir.actions.act_url" id="etv.action_tree_url">
-            <field name="name">etv window tree</field>
-            <field name="url">/etv/etv/</field>
+        <record model="ir.actions.act_url" id="etv.action_url">
+            <field name="name">Employees Json View</field>
+            <field name="url">/etv/tree/</field>
             <field name="target">new</field>
         </record>
 
         <record model="ir.actions.server" id="etv.action_server_code">
-            <field name="name">etv server code</field>
+            <field name="name">Employee Managers</field>
             <field name="model_id" ref="etv.model_etv_etv"/>
             <field name="code">
-                env["etv.etv"].to_json(indent=4)
+                action = {
+                    'name': 'Managers',
+                    'type': 'ir.actions.act_window',
+                    'view_type': 'form',
+                    'view_mode': 'tree,form',
+                    'res_model': 'hr.employee',
+                    'context': {'search_default_top_hierarchy': 1},
+                    'limit': 10,
+                    # 'views': [(env.ref('etv.employee_tree').id, 'tree')],
+                    'view_type': 'form',
+                    'view_mode': 'tree',
+                    'view_id': env.ref('etv.employee_tree').id,
+                    'search_view_id': env.ref('etv.employee_search').id,
+                    'target': 'current',
+                    'domain' : [('child_ids', 'not in', [])],
+                }
             </field>
         </record>
 
@@ -26,13 +48,13 @@
                   parent="hr.menu_hr_root"/>
 
         <!-- menu categories -->
-        <menuitem name="Form list" id="etv.menu_list" parent="etv.menu"
-                  action="etv.action_window_form"/>
+        <menuitem name="Employees Tree View" id="etv.menu_list" parent="etv.menu"
+                  action="etv.action"/>
 
-        <menuitem name="Tree json list" id="etv.menu_json_tree"
-                  parent="etv.menu" action="etv.action_tree_url"/>
+        <menuitem name="Employees Json View" id="etv.menu_json_tree"
+                  parent="etv.menu" action="etv.action_url"/>
 
-        <menuitem name="Server code" id="etv.menu_server_code" parent="etv.menu"
+        <menuitem name="Employees Server Code" id="etv.menu_server_code" parent="etv.menu"
                   action="etv.action_server_code"/>
 
     </data>

@@ -1,15 +1,67 @@
 <odoo>
-    <record model="ir.ui.view" id="etv.view_list">
-        <field name="name">etv view</field>
+
+    <record id="etv.employee_search" model="ir.ui.view">
+        <field name="name">etv.employee.search</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-            <tree>
-                <field name="name_related"/>
-                <field name="image"/>
+            <search string="Top Employees">
+
+                <filter string="Top Hierarchy"
+                        name="top_hierarchy"
+                        domain="[('parent_id','=', None)]"/>
+
+                <filter string="Top Hierarchy With Dependent Employees"
+                        name="top_hierarchy_with_children"
+                        domain="[('parent_id','=', None), ('child_ids', 'not in', [])]"/>
+
+                <filter string="Top Hierarchy Without Dependent Employees"
+                        name="top_hierarchy_without_children"
+                        domain="[('parent_id','=', None), ('child_ids', '=', False)]"/>
+
+                <filter string="Hierarchy With Dependent Employees"
+                        name="hierarchy_with_children"
+                        domain="[('child_ids', 'not in', [])]"/>
+
+                <filter string="List Of Dependent Employees"
+                        name="only_children"
+                        domain="[('parent_id', '!=', None)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Manager" domain="[]"
+                            context="{'group_by':'parent_id'}"/>
+                    <filter string="Coach" domain="[]"
+                            context="{'group_by':'coach_id'}"/>
+                    <filter string="Department" domain="[]"
+                            context="{'group_by':'department_id'}"/>
+                    <filter string="Job" domain="[]"
+                            context="{'group_by':'job_id'}"/>
+                    <filter string="Company" domain="[]"
+                            context="{'group_by':'company_id'}"
+                            groups="base.group_multi_company"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="etv.employee_tree"  model="ir.ui.view">
+        <field name="name">etv.employee.tree</field>
+        <field name="model">hr.employee</field>
+        <field name="field_parent">child_ids</field>
+        <field name="arch" type="xml">
+            <tree string="Employees" toolbar="1" default_order="id asc">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="work_phone"/>
                 <field name="work_email"/>
-                <field name="mobile_phone"/>
-                <field name="marital"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="child_ids" invisible="0"/>
+                <field name="parent_id" invisible="0"/>
+                <field name="coach_id" invisible="1"/>
             </tree>
         </field>
     </record>
+
 </odoo>

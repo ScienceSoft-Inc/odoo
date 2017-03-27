@@ -11,7 +11,7 @@ from odoo.http import Response
 
 class EtvController(http.Controller):
 
-    @http.route('/etv/etv/', auth='public', methods=['GET'])
+    @http.route('/etv/tree/', auth='user', methods=['GET'], website='True')
     def index(self, **kw):
         etv = http.request.env['etv.etv']
         return Response(
